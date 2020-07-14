@@ -11,11 +11,18 @@ import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
+import java.util.List;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    private TextView mMainNameTextView;
+    private TextView mAlsoKnownAsTextView;
+    private TextView mPlaceOfOriginTextView;
+    private TextView mDescriptionTextView;
+    private TextView mIngredientsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +52,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -58,7 +65,23 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        mDescriptionTextView = findViewById(R.id.description_tv);
+        mDescriptionTextView.setText(sandwich.getDescription());
 
+        mPlaceOfOriginTextView = findViewById(R.id.origin_tv);
+        mPlaceOfOriginTextView.setText(sandwich.getPlaceOfOrigin());
+
+        mAlsoKnownAsTextView = findViewById(R.id.also_known_tv);
+        List<String> alsoKnownAsList = sandwich.getAlsoKnownAs();
+        for (String alsoKnownAs: alsoKnownAsList) {
+            mAlsoKnownAsTextView.append(alsoKnownAs + "\n");
+        }
+
+        mIngredientsTextView = findViewById(R.id.ingredients_tv);
+        List<String> ingredientsList = sandwich.getIngredients();
+        for (String ingredient: ingredientsList) {
+            mIngredientsTextView.append(ingredient + "\n");
+        }
     }
 }
